@@ -1062,10 +1062,14 @@ By the end of this workshop, you will:
 
 <!--
 PRESENTER NOTES:
-- Це не просто "зробити pipeline"
-- Ви зрозумієте WHY за кожним кроком
+- Це не просто "зробити pipeline" / This isn't just "build a pipeline"
+- Ви зрозумієте WHY за кожним кроком / You'll understand WHY behind each step
 - Progressive approach = learning-friendly
-- Кожна phase builds на попередній
+- Кожна phase builds на попередній / Each phase builds on the previous
+
+SAY: "Look at these objectives. This isn't just 'build a pipeline and you're done'. You'll understand the principles behind CI/CD, know why quality gates matter, see best practices in action. The goal isn't just to complete the workshop - it's to understand deeply enough to apply this in your own projects."
+
+EMPHASIZE: "Progressive approach means learning-friendly. Each phase builds on the last. By the end, you'll have built something complex, but you understood each piece as it was added."
 -->
 
 ---
@@ -1076,9 +1080,17 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Перед тим як почати - треба setup environment
-- 2 варіанти: Vagrant (recommended) або Docker
-- Якщо вже маєте - супер, перевіримо
+- Перед тим як почати - треба setup environment / Before starting - need to setup environment
+- 2 варіанти: Vagrant (recommended) або Docker / Two options: Vagrant or Docker
+- Якщо вже маєте - супер, перевіримо / If already have it - great, let's verify
+
+SAY: "Before we build, we need Jenkins running. Two options. Option 1: Vagrant - spins up a complete Ubuntu VM with Jenkins pre-configured. Most similar to a real server. Option 2: Docker - lighter, faster, but requires Docker Desktop."
+
+RECOMMEND: "I recommend Vagrant for this workshop if you have VirtualBox. It's closer to how you'd run Jenkins in production."
+
+CHECK: "Quick poll - who already has Jenkins running? Great! Who needs to set it up now?" [Wait for responses]
+
+TIMING: "If using Vagrant, start 'vagrant up' NOW while I explain. It takes 5-10 minutes. We'll continue talking while it runs."
 -->
 
 ---
@@ -1190,11 +1202,19 @@ Each phase builds on the previous one:
 
 <!--
 PRESENTER NOTES:
-- НЕ "ось готовий pipeline, розбирайтесь"
-- Ми будуємо крок за кроком
-- Кожна phase = ви бачите що додалось
-- Як Lego: спочатку база, потім більше features
+- НЕ "ось готовий pipeline, розбирайтесь" / NOT "here's a finished pipeline, figure it out"
+- Ми будуємо крок за кроком / We build step by step
+- Кожна phase = ви бачите що додалось / Each phase shows what was added
+- Як Lego: спочатку база, потім більше features / Like Lego: foundation first, then more features
 - Після Phase 6 = production-ready pipeline!
+
+SAY: "This is the progressive approach. We're NOT giving you a complex pipeline and saying 'figure it out'. We start simple - just checkout code. Then add one thing at a time. Each phase, you see exactly what changed and why."
+
+ANALOGY: "Think of it like learning to drive. You don't start on the highway. You start in an empty parking lot. Then quiet streets. Then busy roads. Then highway. Each step builds confidence. Same here - we build the pipeline layer by layer."
+
+WHY: "This approach is easier to understand, easier to debug, and builds real understanding. You're not just copying code - you understand WHY each piece exists."
+
+OUTCOME: "By Phase 6, you'll have built something production-ready. Not a toy example - a real pipeline you can use in your projects."
 -->
 
 ---
@@ -1225,11 +1245,19 @@ pipeline {
 
 <!--
 PRESENTER NOTES:
-- Найпростіша phase - just checkout
-- Але важлива: connection Git → Jenkins
-- "agent any" = run на будь-якому доступному agent
-- Declarative syntax = читабельний, рекомендований
-- Після цієї phase: Jenkins може читати наш код
+- Найпростіша phase - just checkout / Simplest phase - just checkout
+- Але важлива: connection Git → Jenkins / But important: establishes Git-Jenkins connection
+- "agent any" = run на будь-якому доступному agent / "agent any" runs on any available agent
+- Declarative syntax = читабельний, рекомендований / Declarative syntax is readable and recommended
+- Після цієї phase: Jenkins може читати наш код / After this: Jenkins can read our code
+
+SAY: "Phase 1 - the simplest possible pipeline. It does exactly one thing: checkout code from Git. That's it. But this is crucial - it establishes that Jenkins can connect to your repository."
+
+EXPLAIN SYNTAX: "'pipeline' block defines a declarative pipeline - this is the modern, recommended syntax. 'agent any' means run on any available Jenkins agent. One stage called 'Checkout', one step: checkout scm. SCM means Source Code Management - in our case, Git."
+
+GOAL: "Your goal in Phase 1: see a green build. That's success. Jenkins successfully cloned the code. Foundation established. Now we can build on it."
+
+ENCOURAGE: "This seems trivial, but it's important. You're proving the connection works before adding complexity. Always start simple."
 -->
 
 ---
@@ -1248,6 +1276,29 @@ triggers {
     pollSCM('* * * * *')  // Poll every minute
 }
 // + Go 1.21.5 installation
+// + Dynamic PATH configuration
+```
+
+**Goal**: Auto-build on code changes + Go ready
+
+<!--
+PRESENTER NOTES:
+- Triggers = автоматизація! / Triggers = automation!
+- Poll SCM = Jenkins перевіряє Git кожну хвилину / Poll SCM = Jenkins checks Git every minute
+- Є зміни? → Запускає build / Changes found? Triggers build
+- Альтернатива: webhooks (instant, але потребує setup) / Alternative: webhooks (instant but needs setup)
+- Go installation = pipeline сам встановлює що потрібно / Pipeline installs what it needs
+
+SAY: "Phase 2 adds two big things. First - automation! Triggers block says 'poll SCM every minute'. Jenkins checks Git every 60 seconds. If there are new commits, automatically starts a build. This is continuous integration in action!"
+
+EXPLAIN: "'* * * * *' is cron syntax - every minute. In production, you might do every 5 minutes, or better yet, use webhooks for instant triggering. But polling works everywhere, no firewall config needed."
+
+SAY: "Second big addition - Go environment setup. The pipeline installs Go 1.21.5 automatically. Detects if you're on Mac (arm64) or Linux (amd64), downloads the right version, sets up PATH. Your pipeline is self-contained - doesn't depend on pre-installed tools."
+
+BENEFIT: "This means the pipeline works on any Jenkins instance. No manual 'please install Go first'. The pipeline handles its own dependencies. This is reproducibility in practice."
+
+WATCH: "This phase takes longer - 30-40 seconds to download and install Go. That's normal. Subsequent builds will be faster."
+-->
 // + Dynamic PATH configuration
 ```
 
