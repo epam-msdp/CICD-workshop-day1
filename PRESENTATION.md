@@ -214,10 +214,16 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Quality gate = checkpoint в pipeline
-- Якщо не пройшов - pipeline fails
-- Приклад з життя: metal detector в аеропорту - не пускає далі поки не ок
-- "Shift-left" = перевіряємо раніше в процесі, не в кінці
+- Quality gate = checkpoint в pipeline / Quality gate is a checkpoint in the pipeline
+- Якщо не пройшов - pipeline fails / If it fails - pipeline stops
+- Приклад з життя: metal detector в аеропорту - не пускає далі поки не ок / Real-life example: airport metal detector
+- "Shift-left" = перевіряємо раніше в процесі, не в кінці / "Shift-left" means check earlier, not at the end
+
+SAY: "Quality gates are automated checkpoints. Think of airport security - you don't board the plane until you pass through the metal detector. Same here. Code doesn't proceed to the next stage until it passes the gate."
+
+EXPLAIN: "'Shift-left testing' means moving quality checks earlier in the process. Traditional approach: write code for weeks, then test at the end. Modern approach: check quality at every step. Find issues when they're fresh in your mind and cheap to fix."
+
+EMPHASIZE: "Quality gates aren't bureaucracy - they're guardrails. They prevent bad code from reaching production. Automate the checks, enforce the standards."
 -->
 
 ---
@@ -243,11 +249,19 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Сьогодні ми імплементуємо всі три типи!
+- Сьогодні ми імплементуємо всі три типи! / Today we'll implement all three types!
 - Build - Phase 3
-- Tests - Phase 4
+- Tests - Phase 4  
 - Code Quality - Phase 5
-- Кожен додає новий рівень захисту
+- Кожен додає новий рівень захисту / Each adds a new layer of protection
+
+SAY: "Three types of quality gates. First - Build gates. Can your code even compile? Basic, but critical. You'd be surprised how often code that 'works on my machine' fails to build in CI."
+
+SAY: "Second - Test gates. Do your tests pass? What's your code coverage? This is where you catch logic bugs. 100% of unit tests must pass - no exceptions."
+
+SAY: "Third - Code Quality gates. Static analysis, linting, security scans. These catch issues that tests miss - code smells, potential bugs, security vulnerabilities."
+
+CONNECT: "Today we'll build all three. Phase 3 adds build gate. Phase 4 adds test gate. Phase 5 adds code quality gate. Layer by layer, we're building confidence."
 -->
 
 ---
@@ -273,10 +287,18 @@ Phase 6: Artifacts            → Gate: ready for deployment
 
 <!--
 PRESENTER NOTES:
-- Кожна phase додає quality gate
-- Ми будуємо їх поступово - progressive approach
-- В реальних проектах може бути 10+ gates
+- Кожна phase додає quality gate / Each phase adds a quality gate
+- Ми будуємо їх поступово - progressive approach / We build them progressively
+- В реальних проектах може бути 10+ gates / Real projects can have 10+ gates
 - Security scans, dependency checks, performance tests, etc.
+
+SAY: "Here's how it maps to our workshop. Each phase adds a new quality gate. Phase 1-2 are setup. Phase 3 - build gate, does it compile? Phase 4 - test gate, do tests pass? Phase 5 - code quality gate, is it maintainable? Phase 6 - we create deployable artifacts."
+
+REAL-WORLD: "In production systems, you might have 10+ gates: security scanning, dependency vulnerability checks, performance tests, integration tests, API contract validation, database migration tests... Each one catching a different class of problems."
+
+IMPACT: "Look at the real-world impact. Failed build? Syntax error caught in 2 minutes, not discovered in production. Failed tests? Logic bug caught before code review. Failed linting? Maintainability issues prevented. Pass all gates? High confidence this code is production-ready."
+
+EMPHASIZE: "Progressive approach. We don't build everything at once. We add gates incrementally, understand each one, see the value. By Phase 6, we have a production-ready pipeline."
 -->
 
 ---
@@ -334,11 +356,19 @@ Percentage of code executed by tests
 
 <!--
 PRESENTER NOTES:
-- Coverage показує ЩО виконується, не ЩО правильно
-- 100% coverage не означає bug-free code
-- Але низький coverage = багато непротестованого коду
-- В нашому проекті: 41.2% - є куди рости!
-- Quality gate: можна встановити мінімум, наприклад 70%
+- Coverage показує ЩО виконується, не ЩО правильно / Coverage shows WHAT runs, not WHAT is correct
+- 100% coverage не означає bug-free code / 100% coverage doesn't mean bug-free
+- Але низький coverage = багато непротестованого коду / But low coverage = lots of untested code
+- В нашому проекті: 41.2% - є куди рости! / Our project: 41.2% - room for improvement!
+- Quality gate: можна встановити мінімум, наприклад 70% / Can set minimum threshold, e.g. 70%
+
+SAY: "Important distinction: coverage tells you WHAT code runs during tests, not WHETHER it's correct. You can have 100% coverage and still have bugs if your tests don't check the right things."
+
+ANALOGY: "It's like checking every room in a house, but not actually looking for problems. You visited every room - 100% coverage - but missed the leak in the bathroom."
+
+REALITY: "That said, low coverage is definitely a problem. Our workshop project? 41.2% coverage. That means 58.8% of code has never been executed by tests. Lots of potential hiding places for bugs."
+
+PRACTICAL: "Good teams aim for 70-85% coverage. You can set this as a quality gate - if coverage drops below threshold, build fails. Forces people to write tests."
 -->
 
 ---
@@ -350,9 +380,11 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Зараз розглянемо proven practices
-- Це не теорія, а real-world досвід
-- Дотримання цих practices = успішний CI/CD
+- Зараз розглянемо proven practices / Now let's look at proven practices
+- Це не теорія, а real-world досвід / This isn't theory - it's real-world experience
+- Дотримання цих practices = успішний CI/CD / Following these = successful CI/CD
+
+SAY: "Now for best practices. These aren't academic theories - these are battle-tested approaches from real production systems. Companies doing CI/CD well follow these patterns. Companies struggling? Usually violating several of these."
 -->
 
 ---
@@ -381,10 +413,20 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Швидкість КРИТИЧНА - developers чекають на feedback
-- Якщо build 30+ хвилин - developers не чекають
+- Швидкість КРИТИЧНА - developers чекають на feedback / Speed is CRITICAL - devs wait for feedback
+- Якщо build 30+ хвилин - developers не чекають / If build takes 30+ min - devs don't wait
 - Reproducible = run сьогодні = run завтра (same result)
 - Simplicity = maintainability
+
+SAY: "Three principles for pipeline design. First - speed. Target under 10 minutes for full pipeline. Why? Developer attention span. If your build takes 30 minutes, developers context-switch to other work. They don't see the failure immediately. The code isn't fresh in their mind anymore."
+
+TIPS: "How to speed up? Cache dependencies. Don't download the internet every time. Parallelize independent tasks. Fail fast - run quick unit tests before slow integration tests."
+
+SAY: "Second - reproducibility. Same code, same build, same result. Today, tomorrow, next year. Pin dependency versions. Use containers. If it worked yesterday and fails today, something changed - you need to know what."
+
+SAY: "Third - simplicity. One stage, one job. Clear names. Good error messages. Complex pipelines are hard to debug. When something breaks at 3am, you'll thank yourself for keeping it simple."
+
+EMPHASIZE: "Our workshop pipeline follows all of these. Takes about 2 minutes. Reproducible - same result every time. Simple - easy to understand what each stage does."
 -->
 
 ---
@@ -414,10 +456,20 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Quality checks мають бути automatic, не manual
-- Не витрачайте час на code reviews про formatting
+- Quality checks мають бути automatic, не manual / Quality checks must be automatic
+- Не витрачайте час на code reviews про formatting / Don't waste code review time on formatting
 - "Test early" = shift-left approach
-- Version control = time machine для вашого проекту
+- Version control = time machine для вашого проекту / Version control is a time machine
+
+SAY: "Code quality practices. First - automate quality checks. Run linters on every commit. Enforce code formatting automatically. Why? Don't waste precious code review time debating spaces vs tabs. Let tools handle style, humans focus on logic."
+
+EXAMPLE: "I've seen code reviews with 50 comments about indentation. What a waste! Configure prettier or gofmt, make it automatic, never discuss formatting again."
+
+SAY: "Test early, test often. Unit tests run first - they're fast, give quick feedback. Integration tests come later - they're slower. Don't run your 30-minute integration suite before your 30-second unit tests. Fail fast."
+
+SAY: "Version everything. Not just code - dependencies too. Use lock files (package-lock.json, go.sum). Version your infrastructure (Terraform). Version your configuration. Even version your CI pipeline itself! Everything in Git. Git is truth."
+
+WHY: "So you can go back in time. 'This worked last month, what changed?' Check Git. Dependencies? Check lock file. Infrastructure? Check Terraform. No mysteries."
 -->
 
 ---
@@ -436,6 +488,30 @@ PRESENTER NOTES:
 - Scan dependencies for vulnerabilities
 - Static Application Security Testing (SAST)
 - Container image scanning
+- Regular security audits
+
+**Access Control**
+- Principle of least privilege
+- Use service accounts
+- Audit logs for all operations
+
+<!--
+PRESENTER NOTES:
+- НІКОЛИ не комітьте паролі, API keys, tokens / NEVER commit passwords, API keys, tokens
+- Історія: GitHub scans commits, revokes leaked AWS keys automatically
+- Security - не afterthought, а built-in / Security isn't an afterthought, it's built-in
+- "Shift-left security" - перевіряємо безпеку рано / Check security early
+
+SAY: "Security and secrets - critical topic. Rule number one: NEVER commit secrets to Git. Not API keys, not passwords, not tokens. Git history is forever. Even if you delete it later, it's still there in history."
+
+FACT: "GitHub actively scans commits for AWS credentials and automatically revokes them. That's how big this problem is."
+
+SOLUTION: "Use secret management tools - HashiCorp Vault, AWS Secrets Manager, Azure Key Vault. Or at minimum, environment variables loaded at runtime. Never hardcode secrets."
+
+SAY: "Security scanning. Scan your dependencies - libraries you use might have known vulnerabilities. Use tools like Snyk, Dependabot. Scan your container images. Run SAST tools to find security issues in your code."
+
+PRINCIPLE: "Shift-left security. Don't wait until production to think about security. Check for vulnerabilities in CI. Catch them early when they're cheap to fix."
+-->
 - Regular security audits
 
 **Access Control**
@@ -474,15 +550,26 @@ PRESENTER NOTES:
 - Pipeline as Code (Jenkinsfile in Git)
 - README for setup instructions
 - Runbook for troubleshooting
-- Change log for releases
 
 <!--
 PRESENTER NOTES:
 - Build once = consistency, efficiency
-- Той самий artifact в dev, staging, production
-- Immutable = якщо щось не так, знаємо що саме deployed
-- Rollback - ОБОВ'ЯЗКОВО мати план B
-- Documentation = future you буде вдячний
+- Той самий artifact в dev, staging, production / Same artifact in dev, staging, production
+- Immutable = якщо щось не так, знаємо що саме deployed / Immutable means we know exactly what's deployed
+- Rollback - ОБОВ'ЯЗКОВО мати план B / Rollback - MUST have a plan B
+- Documentation = future you буде вдячний / Documentation - future you will thank yourself
+
+SAY: "Artifacts and deployments. Golden rule: build once, deploy many times. Build your artifact in CI, then deploy that SAME artifact to dev, staging, and production. Don't rebuild for each environment - you might get different results."
+
+EXPLAIN: "Immutable artifacts. Once created, never modified. You deploy version 1.2.3, you know exactly what's running. If something breaks, you know exactly which version to blame. You can download that artifact from six months ago and it's identical to what ran in production."
+
+PRACTICAL: "Include metadata in artifacts. Version number, git commit SHA, build date, who triggered it. When production breaks, you need to know exactly what's deployed."
+
+CRITICAL: "Always have rollback capability. Deployments fail. Bugs slip through. You need a plan B. Blue-green deployments, canary releases - these give you safe rollback options."
+
+DOCUMENTATION: "Document everything. Pipeline as code in Git. README explains setup. Runbook explains troubleshooting. When you're debugging at 3am, you'll thank yourself for writing it down."
+
+TODAY: "In Phase 6, we create artifacts with full metadata. Version, commit SHA, build date - everything you need to track what's deployed."
 -->
 
 ---
