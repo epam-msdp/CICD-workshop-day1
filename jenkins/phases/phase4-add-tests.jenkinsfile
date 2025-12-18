@@ -74,41 +74,49 @@ pipeline {
         stage('Test') {
             steps {
                 echo '🧪 Running tests...'
-                sh '''
-                    # Install go-junit-report for test reporting
-                    if ! command -v go-junit-report &> /dev/null; then
-                        echo "Installing go-junit-report..."
-                        go install github.com/jstemmer/go-junit-report/v2@latest
-                    fi
+                script {
+                    // Run tests and capture exit code
+                    def testExitCode = sh(script: '''
+                        set +e
+                        
+                        echo "Running unit tests with coverage..."
+                        
+                        # Install go-junit-report for JUnit XML generation
+                        if ! command -v go-junit-report &> /dev/null; then
+                            echo "Installing go-junit-report..."
+                            go install github.com/jstemmer/go-junit-report/v2@latest
+                        fi
+                        
+                        # Run tests and save output
+                        go test -v -coverprofile=coverage.out -covermode=atomic ./... > test-output.txt 2>&1
+                        TEST_EXIT=$?
+                        
+                        # Display test output
+                        cat test-output.txt
+                        
+                        exit $TEST_EXIT
+                    ''', returnStatus: true)
                     
-                    # Create test reports directory
-                    mkdir -p test-reports
+                    // Generate JUnit XML report (always, even if tests failed)
+                    sh 'cat test-output.txt | go-junit-report -set-exit-code > test-report.xml || true'
                     
-                    # Run tests with coverage
-                    echo "Running tests with coverage..."
-                    set +e
-                    go test -v -coverprofile=coverage.out -covermode=atomic ./... 2>&1 | tee test-output.txt
-                    TEST_EXIT=$?
-                    set -e
+                    // Publish test results (always)
+                    junit allowEmptyResults: false, testResults: 'test-report.xml'
                     
-                    # Generate JUnit XML report
-                    cat test-output.txt | go-junit-report -set-exit-code > test-reports/junit.xml
+                    // Generate coverage reports
+                    sh '''
+                        echo ""
+                        echo "Coverage summary:"
+                        go tool cover -func=coverage.out || echo "No coverage data"
+                        
+                        # Generate HTML coverage report
+                        go tool cover -html=coverage.out -o coverage.html || echo "Failed to generate HTML coverage"
+                    '''
                     
-                    # Generate HTML coverage report
-                    go tool cover -html=coverage.out -o coverage.html
-                    
-                    # Display coverage summary
-                    echo ""
-                    echo "📊 Coverage Summary:"
-                    go tool cover -func=coverage.out | tail -n 1
-                    
-                    exit ${TEST_EXIT}
-                '''
-            }
-            post {
-                always {
-                    // Publish JUnit test results
-                    junit 'test-reports/*.xml'
+                    // Fail the stage if tests failed
+                    if (testExitCode != 0) {
+                        error("Tests failed with exit code ${testExitCode}")
+                    }
                 }
             }
         }
