@@ -57,8 +57,8 @@ pipeline {
                         curl -fsSL -o ${GO_TARBALL} ${GO_URL}
                         
                         echo "Extracting..."
-                        rm -rf /usr/local/go
-                        tar -C /usr/local -xzf ${GO_TARBALL}
+                        rm -rf ${GOPATH}
+                        tar -C ${WORKSPACE} -xzf ${GO_TARBALL}
                         rm ${GO_TARBALL}
                     fi
                     
