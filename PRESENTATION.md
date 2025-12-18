@@ -18,11 +18,13 @@ footer: 'EPAM Systems | Workshop Day 1'
 
 <!--
 PRESENTER NOTES:
-- Привітайтесь з аудиторією
-- Представтесь та представте воркшоп
-- Згадайте, що це практичний workshop з прогресивним підходом
-- Орієнтовна тривалість: 2-3 години
-- Буде багато практики!
+- Привітайтесь з аудиторією / Greet the audience warmly
+- Представтесь та представте воркшоп / Introduce yourself and the workshop
+- Згадайте, що це практичний workshop з прогресивним підходом / Mention this is hands-on with progressive approach
+- Орієнтовна тривалість: 2-3 години / Expected duration: 2-3 hours
+- Буде багато практики! / Lots of hands-on practice!
+
+SAY: "Welcome everyone! Today we're building a complete CI/CD pipeline from scratch. This isn't just slides and theory - you'll be hands-on throughout. We start simple and progressively add features until we have a production-ready system. By the end, you'll have built something you can actually use in your projects."
 -->
 
 ---
@@ -43,10 +45,12 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Спочатку розглянемо теорію - важливо розуміти "чому"
-- Потім практика - будемо будувати реальний pipeline
-- Задавайте питання в будь-який момент
-- Після теорії буде невелика перерва (5-10 хв)
+- Спочатку розглянемо теорію - важливо розуміти "чому" / First we cover theory - it's crucial to understand the "why"
+- Потім практика - будемо будувати реальний pipeline / Then practice - we'll build a real pipeline
+- Задавайте питання в будь-який момент / Ask questions at any time
+- Після теорії буде невелика перерва (5-10 хв) / Short break after theory (5-10 min)
+
+SAY: "We've structured this in two parts. Part one - 45 minutes of theory. I know, I know, you want to jump into coding. But understanding WHY we do things is crucial. It's the difference between blindly following a recipe versus understanding cooking. Then we break for 10 minutes, grab coffee, and spend 90 minutes building an actual pipeline, hands-on. Questions are welcome anytime - interrupt me, this is interactive."
 -->
 
 ---
@@ -71,9 +75,11 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Почніть з базового визначення
-- Запитайте аудиторію: хто вже використовує CI/CD?
-- Які інструменти використовують? (Jenkins, GitLab CI, GitHub Actions, etc.)
+- Почніть з базового визначення / Start with basic definition
+- Запитайте аудиторію: хто вже використовує CI/CD? / Ask audience: who already uses CI/CD?
+- Які інструменти використовують? (Jenkins, GitLab CI, GitHub Actions, etc.) / What tools do they use?
+
+SAY: "Before we dive in, quick poll - raise your hand if you're already using some form of CI/CD at work. Great! What tools? Jenkins? GitHub Actions? GitLab CI? Keep those in mind - the principles we discuss today apply to all of them."
 -->
 
 ---
@@ -96,11 +102,13 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- CI = про інтеграцію коду та тестування
-- CD = про доставку і deployment
-- Підкресліть: автоматизація - ключ до успіху
-- Згадайте, що CD може означати Continuous Delivery АБО Continuous Deployment
-- Delivery = готово до deployment, Deployment = автоматично задеплоєно
+- CI = про інтеграцію коду та тестування / CI is about code integration and testing
+- CD = про доставку і deployment / CD is about delivery and deployment
+- Підкресліть: автоматизація - ключ до успіху / Emphasize: automation is the key to success
+- Згадайте, що CD може означати Continuous Delivery АБО Continuous Deployment / Mention CD can mean Delivery OR Deployment
+- Delivery = готово до deployment, Deployment = автоматично задеплоєно / Delivery = ready to deploy, Deployment = auto-deployed
+
+SAY: "CI - Continuous Integration - means frequently integrating code from multiple developers and automatically testing it. Every commit triggers tests. Fast feedback. CD extends this. Now here's a trick question - CD can mean TWO things. Continuous Delivery means you're always READY to deploy - one button away. Continuous Deployment means every passing build AUTOMATICALLY goes to production. Big difference! Most companies do Delivery, not Deployment. The keyword for both? Automate."
 -->
 
 ---
@@ -123,10 +131,18 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Розкажіть історію: як виглядало без CI/CD
-- Integration hell - коли всі зливають код в кінці спринту
-- Приклад: bug знайдений через 2 тижні vs 2 хвилини після commit
-- Ціна виправлення bug зростає експоненційно з часом
+- Розкажіть історію: як виглядало без CI/CD / Tell a story: what it was like without CI/CD
+- Integration hell - коли всі зливають код в кінці спринту / Integration hell - when everyone merges at sprint end
+- Приклад: bug знайдений через 2 тижні vs 2 хвилини після commit / Example: bug found after 2 weeks vs 2 minutes
+- Ціна виправлення bug зростає експоненційно з часом / Bug fix cost grows exponentially with time
+
+SAY: "Let me paint a picture of the 'before times'. Picture this: five developers working in isolation for two weeks. Friday afternoon, everyone tries to merge. Conflicts everywhere. Integration takes all weekend. This is 'integration hell'. Even worse - bugs discovered two weeks later cost 10-100x more to fix than if caught immediately."
+
+PAUSE for effect.
+
+SAY: "With CI/CD? You commit. Five minutes later, you know if you broke something. That's the difference between finding a typo while typing versus after the book is printed. One is free, the other is expensive."
+
+ASK: "Who's experienced integration hell? How long did it take to resolve?" [Wait for responses]
 -->
 
 ---
@@ -478,107 +494,107 @@ PRESENTER NOTES:
 
 <!--
 PRESENTER NOTES:
-- Зараз розглянемо типові помилки
-- Всі ці помилки реальні
-- Краще вчитись на чужих помилках 😊
-- Якщо ви робите щось з цього списку - не соромтесь, ми всі через це пройшли
+- Зараз розглянемо типові помилки / Now let's look at common mistakes
+- Всі ці помилки реальні / All these mistakes are real-world examples
+- Краще вчитись на чужих помилках 😊 / Better to learn from others' mistakes
+- Якщо ви робите щось з цього списку - не соромтесь, ми всі через це пройшли / If you're doing any of these - don't be embarrassed, we've all been there
+
+SAY: "Now for the fun part - mistakes! These aren't theoretical - these are real problems I've seen in production. Expensive problems. If you're currently doing any of these, don't worry - every single person in this room has made at least one of these mistakes. Including me. Many times. That's how we learn."
 -->
 
 ---
 
-## ❌ Mistake #1: Manual Steps in "Automated" Pipeline
+## ❌ Mistake #1: Manual Steps
 
-### What People Do Wrong
+### The Problem
 ```bash
-# In Jenkinsfile
-echo "Build complete. Now manually run deploy.sh on server"
-echo "Don't forget to update config.yaml!"
-echo "Remember to notify team in Slack"
+echo "Build done. Now manually:"
+echo "  1. SSH to server, run deploy.sh"
+echo "  2. Update config.yaml"
+echo "  3. Notify team"
 ```
 
-### Why It's Bad
-- Defeats purpose of automation
-- Prone to human error
-- Bottleneck (requires person available)
-- Inconsistent process
+### Why It Fails
+Human error • Bottleneck • Inconsistent
 
-### ✅ Do This Instead
-- Automate EVERYTHING
-- If it needs to be done, pipeline does it
-- No "please remember to..." steps
+### ✅ Solution
+Automate everything in the pipeline
 
 <!--
 PRESENTER NOTES:
-- Класична помилка: "автоматизація" з manual steps
-- "Semi-automatic" = не automatic
-- Якщо щось можна автоматизувати - автоматизуйте
-- Manual steps = weak links в ланцюгу
-- Питання до аудиторії: хто має manual steps? Чому?
+- Класична помилка: "автоматизація" з manual steps / Classic: "automation" with manual steps
+- "Semi-automatic" = не automatic / "Semi-automatic" is NOT automatic
+- Якщо щось можна автоматизувати - автоматизуйте / If it can be automated - automate it
+- Manual steps = weak links в ланцюгу / Manual steps are the weak links
+
+SAY: "This is mistake number one for a reason - it's everywhere. Someone builds an 'automated' pipeline, but then: 'Now manually SSH to the server and run this script'. That's not automation! That's automation theater. The human becomes the bottleneck."
+
+STORY: "I've seen this: Friday 6pm, deploy ready, but Sarah who knows the manual steps already left. Weekend delayed. All because of three manual steps that could've been automated."
+
+ASK: "Honest show of hands - who has manual steps in their pipeline right now?" [Wait] "What's stopping you from automating them?"
+
+EMPHASIZE: "If a step needs to happen, the pipeline does it. Period. No humans required."
 -->
 
 ---
 
 ## ❌ Mistake #2: Ignoring Failed Tests
 
-### What People Do Wrong
-- "Tests are flaky, just rerun"
-- "This test always fails, ignore it"
-- "We'll fix it later" (never happens)
-- Disabling tests instead of fixing
+### The Problem
+- "Flaky test, just rerun" 🔄
+- "Always fails, ignore it" 🙈
+- "Fix later" (never) ⏰
+- Disable instead of fix
 
-### Why It's Bad
-- Erodes trust in test suite
-- Actual bugs get masked
-- Technical debt grows
-- Eventually, no one trusts the pipeline
+### Why It Fails
+Destroys trust • Masks bugs • Growing debt
 
-### ✅ Do This Instead
-- Fix failing tests immediately
-- Delete tests that don't provide value
-- Make tests stable and reliable
-- Never ignore failures
+### ✅ Solution
+- Fix immediately or delete
+- Make tests stable
+- Red build = event, not norm
 
 <!--
 PRESENTER NOTES:
 - "Flaky tests" = tests that randomly fail
-- Якщо tests always fail - це не test, це broken code
-- Broken window theory: один ignored test → більше ignored tests
-- Red build має бути EVENT, не norm
-- Zero tolerance для ignored failures
+- Якщо tests always fail - це не test, це broken code / If tests always fail - that's not a test, that's broken code
+- Broken window theory: один ignored test → більше ignored tests / One ignored test leads to more
+- Red build має бути EVENT, не norm / Red build should be an EVENT, not the norm
+- Zero tolerance для ignored failures / Zero tolerance for ignored failures
+
+SAY: "This is a slippery slope. One test starts failing intermittently. 'It's flaky, just rerun'. Then another. 'That one always fails, ignore it'. Soon you have five red tests and nobody cares. This is the broken window theory - one broken window leads to more."
+
+STORY: "I joined a team where CI was always red. I asked 'is it supposed to be red?' They said 'yeah, ignore those three tests'. That's when you've lost. Your safety net has holes."
+
+EMPHASIZE: "Two choices: fix immediately, or delete the test. A test you ignore is worse than no test - it trains you to ignore failures. When a real bug appears, nobody notices because red is normal."
 -->
 
 ---
 
-## ❌ Mistake #3: No Version Control for Infrastructure
+## ❌ Mistake #3: No Infrastructure Version Control
 
-### What People Do Wrong
+### The Problem
 ```bash
-# Manually configured Jenkins
-# Credentials stored in Jenkins UI
-# Plugins installed manually
-# "Bob knows how it's configured"
+# Manual Jenkins setup
+# Credentials in UI
+# "Bob knows how it works"
 ```
 
-### Why It's Bad
-- Can't reproduce setup
-- No audit trail
-- Single point of failure (Bob!)
-- Disaster recovery impossible
+### Why It Fails
+Can't reproduce • No audit • "Bus factor" 🚌
 
-### ✅ Do This Instead
-- Infrastructure as Code (IaC)
-- Jenkinsfile in Git
-- Configuration in code
-- Everything reproducible
+### ✅ Solution
+Infrastructure as Code (IaC) • Jenkinsfile in Git
 
 <!--
 PRESENTER NOTES:
-- "Infrastructure as Code" = ваша інфраструктура в Git
-- "What if Bob wins lottery?" - Bus factor
+- "Infrastructure as Code" = ваша інфраструктура в Git / Your infrastructure in Git
+- "What if Bob wins lottery?" - Bus factor / The "hit by a bus" problem
 - Manual configuration = tribal knowledge
-- Сьогодні: ми використовуємо Jenkinsfile (pipeline as code!)
+- Сьогодні: ми використовуємо Jenkinsfile (pipeline as code!) / Today: we use Jenkinsfile!
 - Vagrant/Docker = reproducible environments
--->
+
+SAY: \"Here's a scary scenario. Bob manually configured Jenkins two years ago. Clicked through menus, stored credentials in the UI, installed plugins. Documented nothing. Bob wins the lottery, moves to Bahamas. Congratulations, Bob! Your Jenkins crashes. Can you recreate it? No. This is the 'bus factor' - if Bob gets hit by a bus, you're in trouble.\"\n\nSOLUTION: \"Infrastructure as Code. Everything in Git. Jenkinsfile defines your pipeline. Docker or Vagrant defines your environment. Anyone can recreate the entire setup from scratch in minutes. Notice in our workshop - Jenkinsfile is in Git? That's intentional. That's best practice.\"\n\nEMPHASIZE: \"If it's not in version control, it doesn't exist. Documentation becomes outdated, people leave, memories fade. Git is the single source of truth.\"\n-->
 
 ---
 
@@ -607,60 +623,60 @@ DBPassword := getSecret("db-password") // ✅ From secret manager
 <!--
 PRESENTER NOTES:
 - Git history = permanent record
-- Навіть якщо видалите - воно в history
-- GitHub автоматично scans для AWS keys та revokes
-- Real incident: Uber breach через leaked key в Git
+- Навіть якщо видалите - воно в history / Even if you delete it - it's in history
+- GitHub автоматично scans для AWS keys та revokes / GitHub auto-scans for AWS keys and revokes them
+- Real incident: Uber breach через leaked key в Git / Real incident: Uber breach from leaked key
 - Environment variables or secret managers ONLY
-- .gitignore для .env files
+- .gitignore для .env files / Always .gitignore your .env files
+
+SAY: "This is a career-ending mistake. Someone commits an API key to Git. 'Oops, let me delete that commit'. Too late. Git history is forever. That key is permanently in your repository's history. GitHub actually scans for AWS keys and automatically revokes them now - that's how common this problem is."
+
+STORY: "Real example: Uber had a major data breach traced to AWS credentials committed to a private GitHub repo. Cost them $148 million. All because someone committed a password."
+
+EMPHASIZE: "Never, ever commit secrets. Use environment variables or secret managers. Always. No exceptions. Set up .gitignore for .env files before you even write code."
 -->
 
 ---
 
 ## ❌ Mistake #5: Skipping Static Analysis
 
-### What People Do Wrong
-- "We'll lint before release" (never happens)
-- "Linters are annoying" (they find bugs!)
-- "Takes too long" (few seconds actually)
-- "We do code reviews" (not enough)
+### The Problem
+- "We'll lint before release" (never) 🤥
+- "Linters are annoying" (they save time!) ⏱️
+- "Takes too long" (seconds actually) ⚡
 
-### Why It's Bad
-- Technical debt accumulates
-- Bugs make it to production
-- Code becomes unmaintainable
-- Expensive refactoring later
+### Why It Fails
+Debt grows • Bugs slip • Code rots
 
-### ✅ Do This Instead
-- Lint on every commit
-- Make it a required quality gate
-- Fix issues immediately
-- Configure linter rules for your team
+### ✅ Solution
+Lint on every commit • Required gate
 
 <!--
 PRESENTER NOTES:
 - Static analysis = cheap bug detection
-- Знаходить помилки БЕЗ running code
+- Знаходить помилки БЕЗ running code / Finds bugs WITHOUT running code
 - "Annoying" linters save hours of debugging
-- В нашому workshop: Phase 5 = static analysis
-- golangci-lint знаходить ~40 типів проблем
-- Питання: скільки разів linter зберіг вам час?
+- В нашому workshop: Phase 5 = static analysis / In our workshop: Phase 5
+- golangci-lint знаходить ~40 типів проблем / golangci-lint finds ~40 types of issues
+
+SAY: "People skip linting because 'linters are annoying'. You know what's annoying? Debugging a null pointer exception at 3am in production. Static analysis finds bugs without running code. It's like spell-check for code."
+
+STORY: "I've seen linters catch: using a closed database connection, goroutine leaks, SQL injection vulnerabilities. All without running a single test. Takes 10 seconds. How long does debugging in production take?"
+
+EMPHASIZE: "In Phase 5 today, we add golangci-lint. It runs 40+ linters. We make it a required gate - if linting fails, build fails. No merge until code is clean."
+
+ASK: "How many times has a linter saved you from a bug?" [Wait for responses]
 -->
 
 ---
 
 ## ❌ Mistake #6: No Build Cleanup
 
-### What People Do Wrong
+### The Problem
 ```groovy
-pipeline {
-    stages {
-        stage('Build') {
-            steps {
-                // Build on top of previous build
-                sh 'go build'  // ❌ Using old artifacts!
-            }
-        }
-    }
+stage('Build') {
+    // No cleanup! 🗑️
+    sh 'go build'  // ❌ Old artifacts!
 }
 ```
 
