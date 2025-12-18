@@ -1,0 +1,50 @@
+name: Marp to GitHub Pages
+
+on:
+  push:
+    branches:
+      - presentation
+      - main
+    paths:
+      - 'PRESENTATION.md'
+      - '.github/workflows/marp-to-pages.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Marp CLI
+        run: npm install -g @marp-team/marp-cli
+
+      - name: Create docs directory
+        run: mkdir -p docs
+
+      - name: Convert Marp to HTML
+        run: marp PRESENTATION.md -o docs/index.html --html
+
+      - name: Copy assets (if any)
+        run: |
+          if [ -d "assets" ]; then
+            cp -r assets docs/
+          fi
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          publish_branch: gh-pages
