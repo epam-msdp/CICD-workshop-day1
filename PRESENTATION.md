@@ -16,22 +16,65 @@ footer: 'EPAM Systems | Workshop Day 1'
 **Progressive Learning Approach**
 6 Phases from Git Checkout to Production-Ready CI/CD
 
+<!--
+PRESENTER NOTES:
+- Привітайтесь з аудиторією
+- Представтесь та представте воркшоп
+- Згадайте, що це практичний workshop з прогресивним підходом
+- Орієнтовна тривалість: 2-3 години
+- Буде багато практики!
+-->
+
 ---
 
 ## 📋 Workshop Agenda
 
-1. **Introduction to CI/CD**
-2. **Project Overview**
-3. **Environment Setup**
-4. **Phase 1-6: Building the Pipeline**
-5. **Best Practices**
-6. **Q&A**
+### Part 1: Theory (45 min)
+1. **What is CI/CD?**
+2. **Quality Gates & Code Quality**
+3. **Best Practices**
+4. **Common Mistakes to Avoid**
+
+### Part 2: Practice (90+ min)
+5. **Project Overview & Setup**
+6. **Phase 1-6: Building the Pipeline**
+7. **Hands-on Lab**
+8. **Q&A**
+
+<!--
+PRESENTER NOTES:
+- Спочатку розглянемо теорію - важливо розуміти "чому"
+- Потім практика - будемо будувати реальний pipeline
+- Задавайте питання в будь-який момент
+- Після теорії буде невелика перерва (5-10 хв)
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Part 1: Theory
+## Understanding CI/CD
+
+<!--
+PRESENTER NOTES:
+- Наголосіть що theory - це фундамент
+- Без розуміння "чому" практика буде механічною
+- Теорія допоможе приймати правильні рішення в майбутньому
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # What is CI/CD?
+
+<!--
+PRESENTER NOTES:
+- Почніть з базового визначення
+- Запитайте аудиторію: хто вже використовує CI/CD?
+- Які інструменти використовують? (Jenkins, GitLab CI, GitHub Actions, etc.)
+-->
 
 ---
 
@@ -40,34 +83,805 @@ footer: 'EPAM Systems | Workshop Day 1'
 ### **Continuous Integration (CI)**
 - Automate code integration from multiple developers
 - Run automated tests on every commit
-- Catch bugs early
-- Maintain code quality
+- Catch bugs early in development
+- Maintain code quality standards
+- Faster feedback loop for developers
 
 ### **Continuous Delivery (CD)**
 - Automate deployment process
-- Create deployable artifacts
+- Create deployable artifacts consistently
 - Release software faster and more reliably
+- Reduce manual errors and human mistakes
+- Enable rapid iterations
+
+<!--
+PRESENTER NOTES:
+- CI = про інтеграцію коду та тестування
+- CD = про доставку і deployment
+- Підкресліть: автоматизація - ключ до успіху
+- Згадайте, що CD може означати Continuous Delivery АБО Continuous Deployment
+- Delivery = готово до deployment, Deployment = автоматично задеплоєно
+-->
 
 ---
 
-## 🎯 Workshop Learning Objectives
+## Why CI/CD Matters
 
-By the end of this workshop, you will:
+### Without CI/CD
+- ❌ Manual testing and building
+- ❌ "It works on my machine" syndrome
+- ❌ Late bug discovery (expensive fixes)
+- ❌ Slow release cycles
+- ❌ Fear of deployments
 
-✅ Connect Git repositories to Jenkins
-✅ Configure automated build triggers
-✅ Set up Go environment automatically
-✅ Build applications with version injection
-✅ Implement automated testing with coverage
-✅ Add static code analysis (linting)
-✅ Create and archive build artifacts
-✅ Understand progressive pipeline development
+### With CI/CD
+- ✅ Automated everything
+- ✅ Consistent environments
+- ✅ Early bug detection (cheap fixes)
+- ✅ Fast, frequent releases
+- ✅ Confidence in deployments
+
+<!--
+PRESENTER NOTES:
+- Розкажіть історію: як виглядало без CI/CD
+- Integration hell - коли всі зливають код в кінці спринту
+- Приклад: bug знайдений через 2 тижні vs 2 хвилини після commit
+- Ціна виправлення bug зростає експоненційно з часом
+-->
+
+---
+
+## CI/CD Pipeline Flow
+
+```
+Developer Commits Code
+         ↓
+   Source Control (Git)
+         ↓
+   Trigger CI Pipeline
+         ↓
+┌─────────────────────┐
+│   Build & Compile   │
+└─────────────────────┘
+         ↓
+┌─────────────────────┐
+│   Run Unit Tests    │
+└─────────────────────┘
+         ↓
+┌─────────────────────┐
+│  Static Analysis    │ ← Quality Gates
+└─────────────────────┘
+         ↓
+┌─────────────────────┐
+│  Create Artifacts   │
+└─────────────────────┘
+         ↓
+    Ready for Deploy
+```
+
+<!--
+PRESENTER NOTES:
+- Це базовий flow, який ми будемо будувати сьогодні
+- Кожен крок - це quality gate
+- Якщо щось fails - pipeline зупиняється
+- Це захищає production від поганого коду
+- Згадайте: швидкий feedback critical!
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Quality Gates
+## Guardians of Code Quality
+
+<!--
+PRESENTER NOTES:
+- Quality gates = автоматичні перевірки якості
+- Це checkpoints в pipeline
+- Не пускають поганий код далі
+-->
+
+---
+
+## What are Quality Gates?
+
+### Definition
+**Automated checks that code must pass before proceeding to the next stage**
+
+### Purpose
+- Enforce quality standards automatically
+- Catch issues early (shift-left testing)
+- Prevent bad code from reaching production
+- Maintain consistent quality across team
+- Build confidence in releases
+
+<!--
+PRESENTER NOTES:
+- Quality gate = checkpoint в pipeline
+- Якщо не пройшов - pipeline fails
+- Приклад з життя: metal detector в аеропорту - не пускає далі поки не ок
+- "Shift-left" = перевіряємо раніше в процесі, не в кінці
+-->
+
+---
+
+## Types of Quality Gates
+
+### 1. **Build Quality Gates**
+- Code compiles successfully
+- No syntax errors
+- Dependencies resolved
+
+### 2. **Test Quality Gates**
+- Unit tests pass (100% expected)
+- Code coverage threshold (e.g., >70%)
+- Integration tests pass
+- Performance tests within limits
+
+### 3. **Code Quality Gates**
+- Static analysis passes (no critical issues)
+- Code formatting consistent
+- No security vulnerabilities
+- Complexity metrics acceptable
+
+<!--
+PRESENTER NOTES:
+- Сьогодні ми імплементуємо всі три типи!
+- Build - Phase 3
+- Tests - Phase 4
+- Code Quality - Phase 5
+- Кожен додає новий рівень захисту
+-->
+
+---
+
+## Quality Gates in Action
+
+### Example: Our Workshop Pipeline
+
+```
+Phase 1: Git Checkout         → Basic gate: code exists
+Phase 2: Go Environment       → Basic gate: tools ready
+Phase 3: Build                → Gate: code compiles
+Phase 4: Tests                → Gate: tests pass + coverage
+Phase 5: Static Analysis      → Gate: code quality OK
+Phase 6: Artifacts            → Gate: ready for deployment
+```
+
+### Real-World Impact
+- **Failed build** = syntax error caught immediately
+- **Failed tests** = logic bug caught before merge
+- **Failed linting** = maintainability issues prevented
+- **Passed all gates** = high confidence in quality
+
+<!--
+PRESENTER NOTES:
+- Кожна phase додає quality gate
+- Ми будуємо їх поступово - progressive approach
+- В реальних проектах може бути 10+ gates
+- Security scans, dependency checks, performance tests, etc.
+-->
+
+---
+
+## Static Code Analysis - Deep Dive
+
+### What It Checks
+
+#### **Code Smells**
+- Overly complex functions
+- Duplicated code
+- Unused variables
+- Dead code
+
+#### **Bugs**
+- Potential null pointer dereferences
+- Resource leaks
+- Logic errors
+- Race conditions
+
+#### **Security Issues**
+- SQL injection vulnerabilities
+- Hardcoded secrets
+- Insecure cryptography
+- Path traversal risks
+
+<!--
+PRESENTER NOTES:
+- Static analysis = аналіз коду без його виконання
+- Знаходить проблеми, які можуть не проявитись в тестах
+- В нашому workshop: golangci-lint (40+ linters!)
+- Це як spell checker, але для коду
+-->
+
+---
+
+## Code Coverage as Quality Metric
+
+### What is Code Coverage?
+Percentage of code executed by tests
+
+### Types
+- **Line Coverage**: % of lines executed
+- **Branch Coverage**: % of decision branches tested
+- **Function Coverage**: % of functions called
+
+### Typical Thresholds
+- 🔴 <50% - Poor, lots of untested code
+- 🟡 50-70% - Acceptable for some projects
+- 🟢 70-85% - Good, solid coverage
+- 🔵 85%+ - Excellent, thorough testing
+
+### Reality Check
+**Coverage ≠ Quality, but low coverage = definite risk**
+
+<!--
+PRESENTER NOTES:
+- Coverage показує ЩО виконується, не ЩО правильно
+- 100% coverage не означає bug-free code
+- Але низький coverage = багато непротестованого коду
+- В нашому проекті: 41.2% - є куди рости!
+- Quality gate: можна встановити мінімум, наприклад 70%
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Best Practices
+## Do This, Not That
+
+<!--
+PRESENTER NOTES:
+- Зараз розглянемо proven practices
+- Це не теорія, а real-world досвід
+- Дотримання цих practices = успішний CI/CD
+-->
+
+---
+
+## CI/CD Best Practices - Pipeline Design
+
+### ✅ DO
+
+**Keep Builds Fast**
+- Target: <10 minutes for full pipeline
+- Use caching for dependencies
+- Parallelize independent tasks
+- Fail fast - run quick tests first
+
+**Make Builds Reproducible**
+- Pin dependency versions
+- Use containers for consistency
+- Version everything (including tools)
+- Same result every time
+
+**Keep Pipelines Simple**
+- One responsibility per stage
+- Easy to understand and debug
+- Clear stage names
+- Good error messages
+
+<!--
+PRESENTER NOTES:
+- Швидкість КРИТИЧНА - developers чекають на feedback
+- Якщо build 30+ хвилин - developers не чекають
+- Reproducible = run сьогодні = run завтра (same result)
+- Simplicity = maintainability
+-->
+
+---
+
+## CI/CD Best Practices - Code Quality
+
+### ✅ DO
+
+**Automate Quality Checks**
+- Run linters on every commit
+- Enforce formatting (no manual reviews for style)
+- Use static analysis tools
+- Automated security scans
+
+**Test Early, Test Often**
+- Unit tests run first (fast feedback)
+- Integration tests after build
+- Smoke tests before full test suite
+- Test in production-like environment
+
+**Version Everything**
+- Code (Git)
+- Dependencies (lock files)
+- Infrastructure (IaC)
+- Configuration
+- Even CI pipeline itself!
+
+<!--
+PRESENTER NOTES:
+- Quality checks мають бути automatic, не manual
+- Не витрачайте час на code reviews про formatting
+- "Test early" = shift-left approach
+- Version control = time machine для вашого проекту
+-->
+
+---
+
+## CI/CD Best Practices - Security & Secrets
+
+### ✅ DO
+
+**Secrets Management**
+- NEVER commit secrets to Git
+- Use secret management tools (Vault, AWS Secrets Manager)
+- Rotate secrets regularly
+- Audit secret access
+
+**Security Scanning**
+- Scan dependencies for vulnerabilities
+- Static Application Security Testing (SAST)
+- Container image scanning
+- Regular security audits
+
+**Access Control**
+- Principle of least privilege
+- Use service accounts
+- Audit logs for all operations
+- MFA for critical operations
+
+<!--
+PRESENTER NOTES:
+- НІКОЛИ не комітьте паролі, API keys, tokens
+- Історія: GitHub scans commits, revokes leaked AWS keys automatically
+- Security - не afterthought, а built-in
+- "Shift-left security" - перевіряємо безпеку рано
+-->
+
+---
+
+## CI/CD Best Practices - Artifacts & Deployments
+
+### ✅ DO
+
+**Artifact Management**
+- Build once, deploy many times
+- Immutable artifacts (never modify)
+- Include version metadata
+- Retention policy (don't keep forever)
+
+**Deployment Strategy**
+- Automated rollback capability
+- Blue-green or canary deployments
+- Smoke tests after deployment
+- Monitor post-deployment
+
+**Documentation**
+- Pipeline as Code (Jenkinsfile in Git)
+- README for setup instructions
+- Runbook for troubleshooting
+- Change log for releases
+
+<!--
+PRESENTER NOTES:
+- Build once = consistency, efficiency
+- Той самий artifact в dev, staging, production
+- Immutable = якщо щось не так, знаємо що саме deployed
+- Rollback - ОБОВ'ЯЗКОВО мати план B
+- Documentation = future you буде вдячний
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Common Mistakes
+## Learn from Others' Pain
+
+<!--
+PRESENTER NOTES:
+- Зараз розглянемо типові помилки
+- Всі ці помилки реальні
+- Краще вчитись на чужих помилках 😊
+- Якщо ви робите щось з цього списку - не соромтесь, ми всі через це пройшли
+-->
+
+---
+
+## ❌ Mistake #1: Manual Steps in "Automated" Pipeline
+
+### What People Do Wrong
+```bash
+# In Jenkinsfile
+echo "Build complete. Now manually run deploy.sh on server"
+echo "Don't forget to update config.yaml!"
+echo "Remember to notify team in Slack"
+```
+
+### Why It's Bad
+- Defeats purpose of automation
+- Prone to human error
+- Bottleneck (requires person available)
+- Inconsistent process
+
+### ✅ Do This Instead
+- Automate EVERYTHING
+- If it needs to be done, pipeline does it
+- No "please remember to..." steps
+
+<!--
+PRESENTER NOTES:
+- Класична помилка: "автоматизація" з manual steps
+- "Semi-automatic" = не automatic
+- Якщо щось можна автоматизувати - автоматизуйте
+- Manual steps = weak links в ланцюгу
+- Питання до аудиторії: хто має manual steps? Чому?
+-->
+
+---
+
+## ❌ Mistake #2: Ignoring Failed Tests
+
+### What People Do Wrong
+- "Tests are flaky, just rerun"
+- "This test always fails, ignore it"
+- "We'll fix it later" (never happens)
+- Disabling tests instead of fixing
+
+### Why It's Bad
+- Erodes trust in test suite
+- Actual bugs get masked
+- Technical debt grows
+- Eventually, no one trusts the pipeline
+
+### ✅ Do This Instead
+- Fix failing tests immediately
+- Delete tests that don't provide value
+- Make tests stable and reliable
+- Never ignore failures
+
+<!--
+PRESENTER NOTES:
+- "Flaky tests" = tests that randomly fail
+- Якщо tests always fail - це не test, це broken code
+- Broken window theory: один ignored test → більше ignored tests
+- Red build має бути EVENT, не norm
+- Zero tolerance для ignored failures
+-->
+
+---
+
+## ❌ Mistake #3: No Version Control for Infrastructure
+
+### What People Do Wrong
+```bash
+# Manually configured Jenkins
+# Credentials stored in Jenkins UI
+# Plugins installed manually
+# "Bob knows how it's configured"
+```
+
+### Why It's Bad
+- Can't reproduce setup
+- No audit trail
+- Single point of failure (Bob!)
+- Disaster recovery impossible
+
+### ✅ Do This Instead
+- Infrastructure as Code (IaC)
+- Jenkinsfile in Git
+- Configuration in code
+- Everything reproducible
+
+<!--
+PRESENTER NOTES:
+- "Infrastructure as Code" = ваша інфраструктура в Git
+- "What if Bob wins lottery?" - Bus factor
+- Manual configuration = tribal knowledge
+- Сьогодні: ми використовуємо Jenkinsfile (pipeline as code!)
+- Vagrant/Docker = reproducible environments
+-->
+
+---
+
+## ❌ Mistake #4: Committing Secrets to Git
+
+### What People Do Wrong
+```go
+// config.go
+const APIKey = "sk-1234567890abcdef"  // ❌ NEVER!
+const DBPassword = "MyPassword123"    // ❌ NEVER!
+```
+
+### Why It's Bad
+- **Forever in Git history** (even if deleted later)
+- Security breach
+- Compliance violations
+- Credential rotation nightmare
+
+### ✅ Do This Instead
+```go
+// config.go
+APIKey := os.Getenv("API_KEY")        // ✅ From environment
+DBPassword := getSecret("db-password") // ✅ From secret manager
+```
+
+<!--
+PRESENTER NOTES:
+- Git history = permanent record
+- Навіть якщо видалите - воно в history
+- GitHub автоматично scans для AWS keys та revokes
+- Real incident: Uber breach через leaked key в Git
+- Environment variables or secret managers ONLY
+- .gitignore для .env files
+-->
+
+---
+
+## ❌ Mistake #5: Skipping Static Analysis
+
+### What People Do Wrong
+- "We'll lint before release" (never happens)
+- "Linters are annoying" (they find bugs!)
+- "Takes too long" (few seconds actually)
+- "We do code reviews" (not enough)
+
+### Why It's Bad
+- Technical debt accumulates
+- Bugs make it to production
+- Code becomes unmaintainable
+- Expensive refactoring later
+
+### ✅ Do This Instead
+- Lint on every commit
+- Make it a required quality gate
+- Fix issues immediately
+- Configure linter rules for your team
+
+<!--
+PRESENTER NOTES:
+- Static analysis = cheap bug detection
+- Знаходить помилки БЕЗ running code
+- "Annoying" linters save hours of debugging
+- В нашому workshop: Phase 5 = static analysis
+- golangci-lint знаходить ~40 типів проблем
+- Питання: скільки разів linter зберіг вам час?
+-->
+
+---
+
+## ❌ Mistake #6: No Build Cleanup
+
+### What People Do Wrong
+```groovy
+pipeline {
+    stages {
+        stage('Build') {
+            steps {
+                // Build on top of previous build
+                sh 'go build'  // ❌ Using old artifacts!
+            }
+        }
+    }
+}
+```
+
+### Why It's Bad
+- Old artifacts contaminate build
+- "Works in CI, fails locally" (or vice versa)
+- False positives/negatives
+- Debugging nightmare
+
+### ✅ Do This Instead
+```groovy
+pipeline {
+    stages {
+        stage('Cleanup') {
+            steps {
+                deleteDir()  // ✅ Clean slate!
+            }
+        }
+        stage('Checkout') { ... }
+    }
+}
+```
+
+<!--
+PRESENTER NOTES:
+- Clean workspace = reproducible builds
+- Старі artifacts можуть mask проблеми
+- "It worked last time" - може through old files
+- Завжди починайте з чистого стану
+- В нашому workshop: Phase 3 додає cleanup
+- Disk space management також важливий
+-->
+
+---
+
+## ❌ Mistake #7: Slow Feedback Loops
+
+### What People Do Wrong
+- Pipeline takes 45+ minutes
+- Developers don't wait for results
+- Running all tests always (no smart ordering)
+- Sequential execution of independent tasks
+
+### Why It's Bad
+- Developers context-switch
+- Multiple commits before feedback
+- Bugs compound
+- Productivity loss
+
+### ✅ Do This Instead
+- Optimize for speed (<10 min ideal)
+- Fail fast (unit tests first)
+- Parallelize independent stages
+- Cache dependencies
+- Incremental testing
+
+<!--
+PRESENTER NOTES:
+- Швидкість = КЛЮЧ до ефективності CI/CD
+- Developer context: coding → switch to другий task → 45 min → "що я робив?"
+- Fast feedback = immediate fix, minimal impact
+- Slow pipelines = ignored pipelines
+- Target: coffee break length (5-10 min)
+- Питання: скільки у вас займає build?
+-->
+
+---
+
+## ❌ Mistake #8: Not Testing the Build Process Locally
+
+### What People Do Wrong
+- Develop → Commit → Wait for CI
+- "Let's see if it passes CI"
+- No local testing before push
+
+### Why It's Bad
+- Wastes CI resources
+- Slow feedback
+- Frustrates team (broken builds)
+- Red pipeline normalized
+
+### ✅ Do This Instead
+```bash
+# Before committing
+./scripts/build.sh        # ✅ Test build locally
+go test ./...             # ✅ Run tests locally
+golangci-lint run         # ✅ Lint locally
+git commit && git push    # ✅ Now push
+```
+
+<!--
+PRESENTER NOTES:
+- CI - не для debugging your code
+- Local testing = instant feedback
+- CI має бути confirmation, не discovery
+- "If it passes locally, it passes CI"
+- Pre-commit hooks можуть автоматизувати
+- В нашому workshop: scripts/ для local testing!
+-->
+
+---
+
+## ❌ Mistake #9: No Artifact Versioning
+
+### What People Do Wrong
+```bash
+# Always overwrites same file
+cp app /deploy/app        # ❌ Which version is this?
+```
+
+### Why It's Bad
+- Can't track what's deployed
+- Rollback impossible
+- No audit trail
+- Debugging production issues hard
+
+### ✅ Do This Instead
+```bash
+# Version-tagged artifacts
+VERSION=$(git describe --tags --always)
+tar -czf app-${VERSION}.tar.gz app
+# app-v1.2.3-abc123.tar.gz ✅
+```
+
+<!--
+PRESENTER NOTES:
+- Versioning = traceability
+- Production issue? Який version deployed?
+- Need to rollback? До якої version?
+- В нашому workshop: Phase 3 додає version injection
+- Metadata: version, commit SHA, build date
+- Це як номерний знак для вашого build
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Theory Summary
+## Key Takeaways
+
+<!--
+PRESENTER NOTES:
+- Підведемо підсумки теоретичної частини
+- Це фундамент для практики
+- Будь-які питання перед перервою?
+-->
+
+---
+
+## CI/CD Theory - Key Points
+
+### Core Principles
+✅ **Automate Everything** - Manual = error-prone
+✅ **Fast Feedback** - Developers need quick results
+✅ **Quality Gates** - Automated checks at every stage
+✅ **Version Control** - Everything in Git
+✅ **Reproducible** - Same result every time
+
+### What NOT to Do
+❌ Manual steps in automation
+❌ Ignoring failed tests
+❌ Committing secrets
+❌ Skipping static analysis
+❌ No cleanup between builds
+
+<!--
+PRESENTER NOTES:
+- Ці principles застосовуються до будь-якого CI/CD tool
+- Jenkins, GitLab, GitHub Actions - principles однакові
+- Наступна частина: практика!
+- Перерва 10 хвилин, потім hands-on
+-->
+
+---
+
+<!-- _class: lead -->
+
+# ☕ Break Time
+## 10 Minutes
+
+**Coming up next:**
+- Project structure
+- Environment setup
+- Building the pipeline (Phase 1-6)
+
+<!--
+PRESENTER NOTES:
+- Перерва 10 хвилин
+- Після перерви - практична частина
+- Переконайтесь що всі мають доступ до репозиторію
+- Vagrant/Docker ready
+-->
+
+---
+
+<!-- _class: lead -->
+
+# Part 2: Practice
+## Let's Build a Pipeline!
+
+<!--
+PRESENTER NOTES:
+- Welcome back!
+- Тепер застосуємо теорію на практиці
+- Будемо будувати реальний CI/CD pipeline
+- Поступово, phase by phase
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # 📁 Project Structure
+
+<!--
+PRESENTER NOTES:
+- Спочатку розглянемо що ми будемо будувати
+- Простий Go web application
+- Realistic project structure
+-->
 
 ---
 
@@ -87,8 +901,19 @@ workshop-cicd/
 │   └── phase6-add-artifacts.jenkinsfile
 ├── docker/                  # Jenkins in Docker
 ├── scripts/                 # Automation scripts
-└── Vagrantfile             # VM setup
+│   ├── build.sh            # Local build script
+│   └── install-jenkins.sh  # Jenkins setup
+└── Vagrantfile             # VM setup (Ubuntu 24.04)
 ```
+
+<!--
+PRESENTER NOTES:
+- Realistic project structure
+- cmd/webapp = наш application
+- jenkins/phases = 6 етапів воркшопу
+- scripts/ = для local testing (best practice!)
+- 2 варіанти setup: Vagrant або Docker
+-->
 
 ---
 
@@ -100,9 +925,45 @@ workshop-cicd/
   - `GET /` - Web UI with application info
   - `GET /health` - Health check (JSON)
   - `GET /version` - Version information (JSON)
-- Security: Configured timeouts (Read, Write, Idle)
+  
+### Quality Metrics
 - Unit tests with **41.2% coverage**
+- Security: Configured timeouts (Read, Write, Idle)
 - Version injection via build flags
+- Linter-compliant code
+
+<!--
+PRESENTER NOTES:
+- Простий але realistic application
+- Health endpoint = standard practice
+- Version endpoint = для debugging production
+- 41.2% coverage = є куди рости (good example!)
+- Security timeouts = захист від slow clients
+-->
+
+---
+
+## 🎯 Workshop Learning Objectives
+
+By the end of this workshop, you will:
+
+✅ Understand CI/CD principles and quality gates
+✅ Connect Git repositories to Jenkins
+✅ Configure automated build triggers
+✅ Set up Go environment automatically
+✅ Build applications with version injection
+✅ Implement automated testing with coverage
+✅ Add static code analysis (linting)
+✅ Create and archive build artifacts
+✅ Apply CI/CD best practices
+
+<!--
+PRESENTER NOTES:
+- Це не просто "зробити pipeline"
+- Ви зрозумієте WHY за кожним кроком
+- Progressive approach = learning-friendly
+- Кожна phase builds на попередній
+-->
 
 ---
 
@@ -110,18 +971,27 @@ workshop-cicd/
 
 # 🔧 Environment Setup
 
+<!--
+PRESENTER NOTES:
+- Перед тим як почати - треба setup environment
+- 2 варіанти: Vagrant (recommended) або Docker
+- Якщо вже маєте - супер, перевіримо
+-->
+
 ---
 
 ## Two Setup Options
 
-### **Option 1: Vagrant VM** _(Recommended)_
+### **Option 1: Vagrant VM** _(Recommended for Workshop)_
 - Ubuntu 24.04 LTS
 - Pre-configured Jenkins
 - Port: **8080**
-- Initial password: `8e6b171e8fd147bf99bdd3507d7bf861`
+- Initial admin password: `8e6b171e8fd147bf99bdd3507d7bf861`
 
 ```bash
+cd workshop-cicd
 vagrant up
+# Wait 5-10 minutes for setup
 # Access: http://localhost:8080
 ```
 
@@ -130,38 +1000,99 @@ vagrant up
 - Port: **8081**
 
 ```bash
-cd docker && docker-compose up -d
+cd docker
+docker-compose up -d
 # Access: http://localhost:8081
 ```
 
+<!--
+PRESENTER NOTES:
+- Vagrant = ізольована VM, closest to real server
+- Docker = легший, швидший, але потребує Docker Desktop
+- Оберіть те що вам зручніше
+- Якщо Vagrant - запустіть ЗАРАЗ (takes time)
+- Password вже надано = no waiting
+-->
+
 ---
 
-## Prerequisites
+## Prerequisites Check
 
-✓ **Vagrant** (VirtualBox)
-✓ **Docker** (if using Docker option)
-✓ **Go 1.21+** (for local development)
-✓ **4GB+ RAM**
-✓ **Git**
+### Required
+✓ **Vagrant** + VirtualBox (for Vagrant option)
+✓ **Docker** Desktop (for Docker option)
+✓ **Git** installed
+✓ **4GB+ RAM** available
+✓ Repository cloned
+
+### Verify Installation
+```bash
+# Check Git
+git --version
+
+# Check Vagrant (if using)
+vagrant --version
+
+# Check Docker (if using)
+docker --version
+
+# Clone repo
+git clone https://github.com/epam-msdp/CICD-workshop-day1.git
+cd CICD-workshop-day1
+```
+
+<!--
+PRESENTER NOTES:
+- Перевірте що всі мають prerequisites
+- Якщо хтось не готовий - можна працювати в парах
+- Git ОБОВ'ЯЗКОВО
+- Ask: хто вже має все готове?
+- Якщо багато не готові - допоможіть зараз
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # 🎓 The 6 Phases
+## Progressive Pipeline Building
+
+<!--
+PRESENTER NOTES:
+- Зараз розглянемо структуру воркшопу
+- 6 phases = 6 етапів
+- Кожна phase = новий capability
+- Progressive = build knowledge step by step
+-->
 
 ---
 
 ## Progressive Learning Approach
 
+### How It Works
 Each phase builds on the previous one:
 
 1. **Phase 1**: Basic Git Checkout
 2. **Phase 2**: Go Environment + Triggers
 3. **Phase 3**: Build + Cleanup
-4. **Phase 4**: Tests
-5. **Phase 5**: Static Analysis
-6. **Phase 6**: Artifacts _(Production-Ready)_
+4. **Phase 4**: Tests + Coverage
+5. **Phase 5**: Static Analysis (Quality Gate!)
+6. **Phase 6**: Artifacts + Archive (Production-Ready!)
+
+### Why Progressive?
+- ✅ Understand each component
+- ✅ See incremental value
+- ✅ Easier to debug
+- ✅ Build confidence gradually
+
+<!--
+PRESENTER NOTES:
+- НЕ "ось готовий pipeline, розбирайтесь"
+- Ми будуємо крок за кроком
+- Кожна phase = ви бачите що додалось
+- Як Lego: спочатку база, потім більше features
+- Після Phase 6 = production-ready pipeline!
+-->
 
 ---
 
@@ -170,18 +1101,33 @@ Each phase builds on the previous one:
 ### What You'll Learn
 - Connect Jenkins to Git repository
 - Basic Jenkinsfile structure
-- Pipeline stages
+- Declarative pipeline syntax
+- SCM checkout process
 
-### Pipeline Stages
+### Pipeline Content
 ```groovy
-stage('Checkout') {
-    steps {
-        checkout scm
+pipeline {
+    agent any
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
     }
 }
 ```
 
-**Goal**: Successfully clone the repository
+**Goal**: Successfully clone the repository in Jenkins
+
+<!--
+PRESENTER NOTES:
+- Найпростіша phase - just checkout
+- Але важлива: connection Git → Jenkins
+- "agent any" = run на будь-якому доступному agent
+- Declarative syntax = читабельний, рекомендований
+- Після цієї phase: Jenkins може читати наш код
+-->
 
 ---
 
@@ -189,553 +1135,342 @@ stage('Checkout') {
 
 ### What You'll Learn
 - Automated build triggers (SCM polling)
-- Installing Go in pipeline
+- Installing tools in pipeline
 - Architecture detection (amd64/arm64)
+- Environment variables
 
-### New Features
-- `triggers { pollSCM('* * * * *') }` - Poll every minute
-- Automated Go 1.21.5 installation
-- Dynamic PATH configuration
+### New Features Added
+```groovy
+triggers {
+    pollSCM('* * * * *')  // Poll every minute
+}
+// + Go 1.21.5 installation
+// + Dynamic PATH configuration
+```
 
-**Goal**: Auto-build on code changes
+**Goal**: Auto-build on code changes + Go ready
+
+<!--
+PRESENTER NOTES:
+- Triggers = автоматизація!
+- Poll SCM = Jenkins перевіряє Git кожну хвилину
+- Є зміни? → Запускає build
+- Альтернатива: webhooks (instant, але потребує setup)
+- Go installation = pipeline сам встановлює що потрібно
+- Architecture detection = працює на Mac (arm64) і Linux (amd64)
+-->
 
 ---
 
 ## Phase 3: Build + Cleanup
 
 ### What You'll Learn
-- Workspace cleanup
+- Workspace cleanup (clean slate!)
 - Compiling Go applications
 - Version injection via build flags
+- Build artifacts organization
 
-### Key Steps
-```bash
-deleteDir()  # Clean workspace
-go build -ldflags "-X main.Version=${VERSION}" \
-         -o bin/app cmd/webapp/main.go
+### Key Steps Added
+```groovy
+stage('Cleanup') {
+    steps {
+        deleteDir()  // ✅ Remember: avoid old artifacts!
+    }
+}
+stage('Build') {
+    steps {
+        sh '''
+            VERSION=$(git describe --tags --always)
+            go build -ldflags "-X main.Version=${VERSION}" \
+                     -o bin/app cmd/webapp/main.go
+        '''
+    }
+}
 ```
 
-**Goal**: Create compiled binary with version info
+**Goal**: Compiled binary with version info
+
+<!--
+PRESENTER NOTES:
+- deleteDir() = застосовуємо best practice!
+- Чистий workspace = reproducible builds
+- Version injection = build-time metadata
+- git describe дає нам readable version
+- Після build: bin/app готовий до запуску
+- ЦЕ вже mini CI/CD pipeline!
+-->
 
 ---
 
-## Phase 4: Tests
+## Phase 4: Tests + Coverage
 
 ### What You'll Learn
-- Running unit tests
-- Test coverage reporting
-- JUnit integration
+- Running unit tests in pipeline
+- Code coverage reporting
+- JUnit XML integration
+- Test result visualization
 
-### Testing Pipeline
-```bash
-go test -v -coverprofile=coverage.out ./...
-go tool cover -func=coverage.out
+### Testing Pipeline Added
+```groovy
+stage('Test') {
+    steps {
+        sh '''
+            go test -v -coverprofile=coverage.out ./...
+            go tool cover -func=coverage.out
+        '''
+    }
+}
+post {
+    always {
+        junit '**/test-results.xml'  // Test results in UI
+    }
+}
 ```
 
-### JUnit Reporting
-- Parse test results
-- Display in Jenkins UI
-- Track test trends
-
 **Goal**: Automated testing with visibility
+
+<!--
+PRESENTER NOTES:
+- Тести = КРИТИЧНА частина CI/CD
+- Without tests = немає confidence
+- Coverage report показує untested code
+- JUnit format = Jenkins розуміє, показує graphs
+- post/always = навіть якщо tests fail, ми бачимо results
+- Quality gate: можна додати "мінімум 70% coverage"
+-->
 
 ---
 
 ## Phase 5: Static Analysis
 
 ### What You'll Learn
-- Code quality checks
+- Code quality enforcement
 - Multiple linting tools
-- Fail on quality issues
+- Quality gate implementation
+- Fast failure strategy
 
-### Tools Used
-- **golangci-lint** - Meta-linter (runs 40+ linters)
+### Tools Added
+- **golangci-lint** - Meta-linter (runs 40+ linters!)
 - **go vet** - Official Go static analyzer
 - **gofmt** - Code formatting checker
 
-**Goal**: Maintain code quality standards
+```groovy
+stage('Static Analysis') {
+    steps {
+        sh 'golangci-lint run --timeout=5m'
+        sh 'go vet ./...'
+        sh 'test -z "$(gofmt -l .)"'  // No formatting issues
+    }
+}
+```
+
+**Goal**: Enforce code quality standards
+
+<!--
+PRESENTER NOTES:
+- ЦЕ quality gate в дії!
+- Якщо linter знаходить проблеми → pipeline fails
+- golangci-lint = powerful, 40+ checks
+- go vet = finds suspicious code
+- gofmt = formatting consistency
+- Застосовуємо best practice: automate quality checks
+- Питання: який linter ви використовуєте?
+-->
 
 ---
 
-## Phase 6: Artifacts (Production-Ready)
+## Phase 6: Artifacts + Archive
 
 ### What You'll Learn
 - Creating deployment artifacts
 - Tarball packaging
 - Metadata generation
 - Artifact archival in Jenkins
+- Build retention policies
 
 ### Artifact Contents
 ```
 artifacts/
 ├── app              # Compiled binary
-├── version.txt      # Version info
+├── version.txt      # Build metadata
+│   ├── VERSION=v1.0.0-abc123
+│   ├── COMMIT_SHA=abc123def456
+│   ├── BUILD_DATE=2024-12-18T10:30:00Z
+│   └── GO_VERSION=1.21.5
 └── run.sh           # Startup script
 ```
 
-**Goal**: Complete CI/CD pipeline with deployable artifacts
+```groovy
+stage('Archive') {
+    steps {
+        archiveArtifacts artifacts: 'artifacts/*.tar.gz'
+    }
+}
+```
+
+**Goal**: Production-ready, deployable artifacts
+
+<!--
+PRESENTER NOTES:
+- FINAL PHASE = повноцінний CI/CD!
+- Artifact = все що треба для deployment
+- Binary + metadata + startup script
+- Tarball = easy to transfer and extract
+- archiveArtifacts = зберігається в Jenkins
+- Можна download і deploy на сервер
+- Retention = не зберігаємо все forever
+- ЦЕ вже production-ready pipeline!
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # 🔄 Complete Pipeline Flow
+## Putting It All Together
+
+<!--
+PRESENTER NOTES:
+- Подивимось на complete flow
+- Від commit до deployable artifact
+- Це те що ми збудували!
+-->
 
 ---
 
-## Final Pipeline Architecture
+## Final Pipeline Architecture (Phase 6)
 
 ```
-1. Git Checkout (SCM)
-   ↓
-2. Setup Go Environment (Go 1.21.5)
-   ↓
-3. Download Dependencies (go mod)
-   ↓
-4. Static Analysis (golangci-lint, go vet, gofmt)
-   ↓
-5. Build Application (inject version)
-   ↓
-6. Run Tests (coverage + JUnit)
-   ↓
-7. Create Artifacts (tarball + metadata)
-   ↓
-8. Archive in Jenkins
+1. Trigger: Code Commit → Git Push
+         ↓
+2. Trigger: SCM Poll detects change (every minute)
+         ↓
+3. Cleanup: deleteDir() - Clean workspace
+         ↓
+4. Checkout: Clone Git repository
+         ↓
+5. Environment: Install Go 1.21.5, set PATH
+         ↓
+6. Dependencies: go mod download
+         ↓
+7. Static Analysis: golangci-lint + go vet + gofmt
+         ↓ (Quality Gate #1)
+8. Build: Compile with version injection
+         ↓ (Quality Gate #2)
+9. Test: Run unit tests + coverage
+         ↓ (Quality Gate #3)
+10. Artifacts: Create tarball + metadata
+         ↓
+11. Archive: Store in Jenkins
+         ↓
+12. ✅ Success: Ready for deployment!
 ```
 
----
-
-## Pipeline Triggers
-
-### Automated
-- **SCM Polling**: Every minute (`* * * * *`)
-- Checks for new commits
-- Auto-starts build
-
-### Manual
-- Build Now button
-- Parameterized builds
-- Webhook triggers (GitHub/GitLab)
-
----
-
-## Version Injection
-
-### Build-time Version Information
-
-```go
-var (
-    Version   string  // From git tag
-    CommitSHA string  // Current commit
-    BuildDate string  // Build timestamp
-)
-```
-
-### Usage in Pipeline
-```bash
-VERSION=$(git describe --tags --always)
-BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-```
-
-**Benefit**: Track exactly what version is deployed
-
----
-
-<!-- _class: lead -->
-
-# 🎯 Best Practices
-
----
-
-## CI/CD Best Practices
-
-### ✅ Do's
-- Start small, build incrementally (phases!)
-- Automate everything possible
-- Test early and often
-- Keep builds fast
-- Version your artifacts
-- Use declarative pipelines
-- Clean workspace between builds
-
----
-
-## CI/CD Best Practices
-
-### ❌ Don'ts
-- Don't commit secrets to Git
-- Don't skip tests
-- Don't have manual steps in automation
-- Don't ignore failing tests
-- Don't build without version control
-- Don't deploy without artifacts
-
----
-
-## Jenkins Pipeline Best Practices
-
-### Structure
-- Use **declarative syntax** (easier to read)
-- Break into **logical stages**
-- Use **environment variables**
-- Implement **proper error handling**
-
-### Performance
-- Parallel execution where possible
-- Cache dependencies
-- Clean up artifacts
-- Use lightweight agents
-
----
-
-## Go-Specific Best Practices
-
-### Testing
-- Write tests for all critical code
-- Aim for >70% coverage
-- Use table-driven tests
-- Run tests in pipeline
-
-### Code Quality
-- Use golangci-lint
-- Run go vet
-- Format with gofmt
-- Fix issues immediately
+<!--
+PRESENTER NOTES:
+- Ось complete flow що ми збудували
+- 3 quality gates: static analysis, build, tests
+- Якщо любий fails → pipeline stops
+- Success = high confidence in quality
+- Від commit до artifact = повна автоматизація
+- Це можна deploy на production!
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # 🚀 Let's Get Started!
+## Hands-On Lab
+
+<!--
+PRESENTER NOTES:
+- Час для практики!
+- Зараз разом пройдемо setup
+- Потім ви самі будете проходити phases
+- Я допомагаю якщо є проблеми
+-->
 
 ---
 
-## Getting Started
+## Step-by-Step Setup
 
-### Step 1: Clone Repository
+### 1. Clone Repository
 ```bash
 git clone https://github.com/epam-msdp/CICD-workshop-day1.git
 cd CICD-workshop-day1
 ```
 
-### Step 2: Start Environment
+### 2. Start Environment
 ```bash
-# Vagrant
+# Option A: Vagrant (Recommended)
 vagrant up
+# Access Jenkins: http://localhost:8080
+# Password: 8e6b171e8fd147bf99bdd3507d7bf861
 
-# OR Docker
+# Option B: Docker
 cd docker && docker-compose up -d
+# Access Jenkins: http://localhost:8081
 ```
 
-### Step 3: Access Jenkins
-- Vagrant: http://localhost:8080
-- Docker: http://localhost:8081
+<!--
+PRESENTER NOTES:
+- Робимо це РАЗОМ, крок за кроком
+- Vagrant up займає 5-10 хвилин
+- Docker швидше - 2-3 хвилини
+- Поки Jenkins запускається - можна подивитись код
+- Питання: всі успішно клонували?
+-->
 
 ---
 
-## Create Your First Pipeline Job
-
-1. **New Item** → Pipeline
-2. **Name**: `workshop-pipeline`
-3. **Pipeline Definition**: Pipeline script from SCM
-4. **SCM**: Git
-5. **Repository URL**: `https://github.com/epam-msdp/CICD-workshop-day1.git`
-6. **Script Path**: `jenkins/phases/phase1-basic-checkout.jenkinsfile`
-7. **Save** and **Build Now**
-
----
-
-## Workshop Flow
-
-1. Start with **Phase 1** (basic checkout)
-2. Verify it works
-3. Update Script Path to **Phase 2**
-4. Build and verify
-5. Continue through **Phase 3-6**
-6. Each phase adds new capabilities
-7. Final phase = Production-ready pipeline!
-
----
-
-## Hands-On Practice
-
-### During the Workshop
-- Follow along with each phase
-- Run builds after each phase
-- Observe the changes
-- Ask questions!
-- Experiment with modifications
-
-### After the Workshop
-- Complete guide: `jenkins/phases/README.md`
-- Detailed documentation for each phase
-- Try customizing the pipeline
-- Add your own stages
-
----
-
-<!-- _class: lead -->
-
-# 📊 What You'll See
-
----
-
-## Jenkins UI - Pipeline View
-
-### Blue Ocean Interface
-- Visual pipeline representation
-- Stage-by-stage execution
-- Real-time logs
-- Test results integration
-
-### Classic View
-- Build history
-- Console output
-- Test trends
-- Artifact downloads
-
----
-
-## Build Artifacts
-
-### What Gets Created
-```
-artifacts/
-├── app                 # Compiled binary (Go)
-├── version.txt         # Build metadata
-│   ├── VERSION=v1.0.0-abc123
-│   ├── COMMIT_SHA=abc123def456
-│   ├── BUILD_DATE=2024-12-18T10:30:00Z
-│   └── GO_VERSION=1.21.5
-└── run.sh             # Startup script
-```
-
-### Archived in Jenkins
-- Download from build page
-- Track versions
-- Deploy to environments
-
----
-
-## Test Results
-
-### JUnit Integration
-- Test pass/fail counts
-- Execution time
-- Trend graphs
-- Historical data
-
-### Coverage Reports
-- Line coverage: **41.2%**
-- Function coverage
-- Identify untested code
-- Quality gates
-
----
-
-<!-- _class: lead -->
-
-# 🔍 Key Concepts Review
-
----
-
-## Pipeline as Code
-
-### Benefits
-- **Version Controlled**: Jenkinsfile in Git
-- **Reviewable**: Code review for pipeline changes
-- **Reproducible**: Same pipeline everywhere
-- **Declarative**: Clear, readable syntax
-
-### Example
-```groovy
-pipeline {
-    agent any
-    stages {
-        stage('Build') { steps { sh 'make' } }
-        stage('Test') { steps { sh 'make test' } }
-    }
-}
-```
-
----
-
-## Continuous Integration Benefits
-
-### For Developers
-- Faster feedback on code changes
-- Catch bugs early
-- Automated testing
-- Consistent build environment
-
-### For Teams
-- Reduce integration problems
-- Improve code quality
-- Faster delivery
-- Better collaboration
-
----
-
-## Static Code Analysis
-
-### Why It Matters
-- Catch bugs before runtime
-- Enforce coding standards
-- Improve code maintainability
-- Reduce technical debt
-
-### Tools in This Workshop
-- **golangci-lint**: 40+ linters in one
-- **go vet**: Official Go static analyzer
-- **gofmt**: Code formatting
-
----
-
-<!-- _class: lead -->
-
-# 💡 Tips & Troubleshooting
-
----
-
-## Common Issues
-
-### Build Fails
-- Check Go version (should be 1.21.5)
-- Verify PATH includes Go binary
-- Check workspace cleanup
-
-### Tests Fail
-- Review test output in Jenkins
-- Run locally: `go test -v ./...`
-- Check test coverage
-
-### Static Analysis Fails
-- Review linter output
-- Fix issues: `golangci-lint run`
-- Format code: `gofmt -w .`
-
----
-
-## Debugging Tips
-
-### View Logs
-```bash
-# Jenkins console output
-# Shows each command executed
-# Check for error messages
-```
-
-### Local Testing
-```bash
-# Test build locally
-./scripts/build.sh
-
-# Run tests
-go test -v ./...
-
-# Check linting
-golangci-lint run
-```
-
----
-
-## Performance Optimization
-
-### Speed Up Builds
-- Use Go module caching
-- Parallel test execution
-- Lightweight Docker images
-- Incremental builds
-
-### Resource Management
-- Clean workspace regularly
-- Archive only necessary artifacts
-- Limit log retention
-- Use build timeouts
-
----
-
-<!-- _class: lead -->
-
-# 📚 Additional Resources
-
----
-
-## Documentation
-
-### Workshop Materials
-- 📖 **Complete Guide**: `jenkins/phases/README.md`
-- 📁 **Phase Files**: `jenkins/phases/phase*.jenkinsfile`
-- 🔧 **Scripts**: `scripts/` directory
-
-### Official Documentation
-- [Jenkins Pipeline](https://www.jenkins.io/doc/book/pipeline/)
-- [Go Documentation](https://go.dev/doc/)
-- [golangci-lint](https://golangci-lint.run/)
-
----
-
-## Next Steps
-
-### After This Workshop
-1. Complete all 6 phases
-2. Customize the pipeline
-3. Add your own stages
-4. Integrate with your projects
-5. Explore Blue Ocean interface
-6. Set up webhooks (GitHub/GitLab)
-7. Add deployment stages
-8. Implement notifications (email/Slack)
-
----
-
-## Advanced Topics
-
-### Beyond This Workshop
-- Multi-branch pipelines
-- Parameterized builds
-- Docker integration
-- Kubernetes deployment
-- Security scanning
-- Performance testing
-- Rollback strategies
-- Production monitoring
-
----
-
-<!-- _class: lead -->
-
-# 🎊 Let's Build a Pipeline!
-
-## Ready to Start?
-
-### Phase 1: Basic Checkout
-**Script Path**: `jenkins/phases/phase1-basic-checkout.jenkinsfile`
-
-**Let's go!** 🚀
+## Create Pipeline & Run Phases
+
+### Jenkins Setup (5 min)
+1. Open Jenkins → **New Item**
+2. Name: `workshop-pipeline`, Type: **Pipeline**
+3. Pipeline from SCM → Git
+4. URL: `https://github.com/epam-msdp/CICD-workshop-day1.git`
+5. Script Path: `jenkins/phases/phase1-basic-checkout.jenkinsfile`
+
+### Progress Through Phases (60-90 min)
+- Phase 1 → Build Now → Verify
+- Update Script Path to Phase 2 → Build
+- Repeat for Phases 3-6
+- Each phase adds new capabilities
+- Final result: Production-ready pipeline!
+
+<!--
+PRESENTER NOTES:
+- Проведу через весь процес step-by-step
+- Після кожної phase обговоримо результати
+- Темп гнучкий - підлаштуємось під аудиторію
+- Мета: розуміння, не просто execution
+- Phase 6 = повний успіх!
+-->
 
 ---
 
 <!-- _class: lead -->
 
 # Thank You!
+## Happy Building! 🎉
 
-## Questions?
+### Resources
+- 📖 Repository: https://github.com/epam-msdp/CICD-workshop-day1
+- 📋 Complete Guide: `jenkins/phases/README.md`
+- 💬 Questions: Ask anytime!
 
-**Workshop Resources**
-- Repository: https://github.com/epam-msdp/CICD-workshop-day1
-- Guide: jenkins/phases/README.md
-
-**Contact**
-EPAM Systems - Workshop Day 1
-
----
-
-<!-- _class: lead -->
-
-# Happy Building! 🚀
-
-### Remember:
+**Remember:**
 *"Automate everything you can,*
 *test everything you build,*
 *and ship with confidence!"*
+
+<!--
+PRESENTER NOTES:
+- Заключні слова - дякуємо за участь!
+- Resources доступні для self-study
+- Encourage застосування в real projects
+- Stay available для питань після workshop
+- Good luck building your pipelines! 🚀
+-->
