@@ -16,9 +16,9 @@ pipeline {
         BUILD_NUMBER = "${env.BUILD_NUMBER}"
         GO_VERSION = '1.21.5'
         GOLANGCI_LINT_VERSION = '1.55.2'
-        GOPATH = "${WORKSPACE}/go"
-        GOROOT = "/usr/local/go"
-        PATH = "/usr/local/go/bin:${GOPATH}/bin:${PATH}"
+        GOROOT = "${WORKSPACE}/go"
+        GOPATH = "${WORKSPACE}/gopath"
+        PATH = "${WORKSPACE}/go/bin:${WORKSPACE}/gopath/bin:${PATH}"
     }
     
     stages {
@@ -53,7 +53,6 @@ pipeline {
                         GO_URL="https://go.dev/dl/${GO_TARBALL}"
                         
                         curl -fsSL -o ${GO_TARBALL} ${GO_URL}
-                        rm -rf ${GOPATH}
                         tar -C ${WORKSPACE} -xzf ${GO_TARBALL}
                         rm ${GO_TARBALL}
                     fi
