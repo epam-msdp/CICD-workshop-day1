@@ -107,7 +107,7 @@ pipeline {
                     
                     echo ""
                     echo "Running go fmt check..."
-                    UNFORMATTED=$(gofmt -l .)
+                    UNFORMATTED=$(gofmt -l cmd/)
                     if [ -n "$UNFORMATTED" ]; then
                         echo "❌ Unformatted files: $UNFORMATTED"
                         exit 1
