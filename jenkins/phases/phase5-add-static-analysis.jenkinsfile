@@ -146,9 +146,6 @@ pipeline {
                         go install github.com/jstemmer/go-junit-report/v2@latest
                     fi
                     
-                    # Ensure dependencies are up to date
-                    go mod tidy
-                    
                     mkdir -p test-reports
                     
                     # Run tests and capture output

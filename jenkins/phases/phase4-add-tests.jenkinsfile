@@ -87,9 +87,6 @@ pipeline {
                             go install github.com/jstemmer/go-junit-report/v2@latest
                         fi
                         
-                        # Ensure dependencies are up to date
-                        go mod tidy
-                        
                         # Run tests and save output
                         go test -v -coverprofile=coverage.out -covermode=atomic ./cmd/... > test-output.txt 2>&1
                         TEST_EXIT=$?
