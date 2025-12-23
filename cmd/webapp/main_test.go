@@ -70,7 +70,7 @@ func TestVersionHandler(t *testing.T) {
 	}
 }
 
-func TestBrokenFeature(t *testing.T) {
-	// This test intentionally fails to demonstrate test reporting in Jenkins
-	t.Error("This test is intentionally failing to show test failure reporting in CI/CD pipeline")
-}
+// func TestBrokenFeature(t *testing.T) {
+// 	// This test intentionally fails to demonstrate test reporting in Jenkins
+// 	t.Error("This test is intentionally failing to show test failure reporting in CI/CD pipeline")
+// }
