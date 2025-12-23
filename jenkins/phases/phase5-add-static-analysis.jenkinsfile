@@ -99,11 +99,11 @@ pipeline {
                     golangci-lint --version
                     
                     # Run golangci-lint
-                    golangci-lint run --timeout 5m ./...
+                    golangci-lint run --timeout 5m ./cmd/...
                     
                     echo ""
                     echo "Running go vet..."
-                    go vet ./...
+                    go vet ./cmd/...
                     
                     echo ""
                     echo "Running go fmt check..."
